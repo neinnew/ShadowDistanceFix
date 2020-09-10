@@ -1,8 +1,5 @@
 ﻿using ICities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace ShadowDistanceFix
 {
@@ -25,27 +22,54 @@ namespace ShadowDistanceFix
             4000
         };
 
+        /// <summary>
+        /// Called by the game when the mod is enabled.
+        /// </summary>
+        public void OnEnabled()
+        {
+            // Load the settings file.
+            SDPSettings.LoadSettings();
+        }
+
         public void OnSettingsUI(UIHelperBase helper)
         {
             UIHelperBase group = helper.AddGroup("Shadow Distance Fix");
-            group.AddSlider("Shadow Distance", 6000, 40000, 1000f, 40000f, sel =>
+            group.AddSlider("Shadow Distance", 6000, 40000, 1000f, SDPSettings.maxDistance, sel =>
             {
                 var sdf = UnityEngine.Object.FindObjectOfType<CameraController>();
-                sdf.m_maxShadowDistance = sel;
 
+                // Null check - for e.g. access from main menu options before game has loaded.
+                if (sdf != null)
+                {
+                    sdf.m_maxShadowDistance = sel;
+                }
+
+                // Update and save settings.
+                SDPSettings.maxDistance = sel;
+                SDPSettings.SaveSettings();
             });
 
-            group.AddDropdown("minShadowDistance", OptionLabels, 1, sel =>
+            group.AddDropdown("minShadowDistance", OptionLabels, SDPSettings.minDistance, sel =>
             {
                 var sdfmin = UnityEngine.Object.FindObjectOfType<CameraController>();
-                sdfmin.m_minShadowDistance = OptionValues[sel];
+
+                // Null check - for e.g. access from main menu options before game has loaded.
+                if (sdfmin != null)
+                {
+                    sdfmin.m_minShadowDistance = OptionValues[sel];
+                }
+
+                // Update and save settings.
+                SDPSettings.minDistance = sel;
+                SDPSettings.SaveSettings();
             });
 
         }
         public override void OnLevelLoaded(LoadMode mode)
         {
             var sdp = UnityEngine.Object.FindObjectOfType<CameraController>();
-            sdp.m_maxShadowDistance = 40000;
+            sdp.m_maxShadowDistance = SDPSettings.maxDistance;
+            sdp.m_minShadowDistance = OptionValues[SDPSettings.minDistance];
         }
     }
 }
