@@ -10,15 +10,19 @@ namespace ShadowDistanceFix
 
         private static readonly string[] OptionLabels =
         {
+            "Very Sharpen",
             "Sharpen",
             "Vanilla",
-            "Blurry"
+            "Blurry",
+            "Very Blurry"
         };
 
         private static readonly float[] OptionValues =
         {
             40,
+            100,
             400,
+            1000,
             4000
         };
 
@@ -73,6 +77,3 @@ namespace ShadowDistanceFix
         }
     }
 }
-// test
-// test
-// test

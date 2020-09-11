@@ -27,7 +27,7 @@ namespace ShadowDistanceFix
     {
         private static readonly string SettingsFileName = "ShadowDistancePatch.xml";
         internal static float maxDistance = 40000f;
-        internal static int minDistance = 1;
+        internal static int minDistance = 2;
 
 
         /// <summary>
